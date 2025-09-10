@@ -1,0 +1,18 @@
+{
+  "header": {
+    "title": "Draft"
+  },
+  "tabs": {
+    "generateAI": "Generate using AI",
+    "createCustom": "Create custom post"
+  },
+  "bottomSheet": {
+    "title": "Get the best results",
+    "description": "Draft isn't your typical AI assistant. To get the most out of it, here are a few insider tips...",
+    "ctaButton": "Tell me more"
+  },
+  "buttons": {
+    "voiceIcon": "🎤",
+    "sendIcon": "↑"
+  }
+}

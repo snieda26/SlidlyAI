@@ -1,0 +1,18 @@
+{
+  "header": {
+    "title": "Borrador"
+  },
+  "tabs": {
+    "generateAI": "Generar con IA",
+    "createCustom": "Crear publicación personalizada"
+  },
+  "bottomSheet": {
+    "title": "Obtén los mejores resultados",
+    "description": "Draft no es tu asistente de IA típico. Para aprovecharlo al máximo, aquí tienes algunos consejos internos...",
+    "ctaButton": "Dime más"
+  },
+  "buttons": {
+    "voiceIcon": "🎤",
+    "sendIcon": "↑"
+  }
+}
