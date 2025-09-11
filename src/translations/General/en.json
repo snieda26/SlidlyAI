@@ -2,6 +2,12 @@
   "header": {
     "title": "Slidly"
   },
+  "home": {
+    "generateByAI": "Generate by AI",
+    "aiDescription": "I can turn your ideas into social media post",
+    "customPost": "Custom post",
+    "customDescription": "Create your custom post. add some text ..."
+  },
   "tabs": {
     "generateAI": "Generate using AI",
     "createCustom": "Create custom post"

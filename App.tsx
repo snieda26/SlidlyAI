@@ -14,10 +14,11 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import Header from './src/components/Header';
-import TabNavigation from './src/components/TabNavigation';
+import HomePage from './src/pages/HomePage';
 import AIGenerationPage from './src/pages/AIGenerationPage';
 import CustomPostPage from './src/pages/CustomPostPage';
 import BottomSheet from './src/components/BottomSheet';
+import BottomNavigation from './src/components/BottomNavigation';
 import { initializeLocale } from './src/i18n';
 
 function App() {
@@ -37,8 +38,11 @@ function App() {
 
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<'ai' | 'custom'>('ai');
+  const [currentPage, setCurrentPage] = useState<'home' | 'ai' | 'custom'>(
+    'home',
+  );
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('my-slides');
 
   const handleMenuPress = () => {
     // TODO: Implement menu functionality
@@ -59,23 +63,53 @@ function AppContent() {
     setIsBottomSheetVisible(false);
   };
 
-  const handleTabChange = (tab: 'ai' | 'custom') => {
+  const handleNavigateToAI = () => {
+    setCurrentPage('ai');
+  };
+
+  const handleNavigateToCustom = () => {
+    setCurrentPage('custom');
+  };
+
+  const handleBackToHome = () => {
+    setCurrentPage('home');
+  };
+
+  const handleTabPress = (tab: string) => {
     setActiveTab(tab);
+    // TODO: Implement navigation logic for each tab
+    console.log('Tab pressed:', tab);
+  };
+
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'ai':
+        return <AIGenerationPage onBack={handleBackToHome} />;
+      case 'custom':
+        return <CustomPostPage onBack={handleBackToHome} />;
+      default:
+        return (
+          <HomePage
+            onNavigateToAI={handleNavigateToAI}
+            onNavigateToCustom={handleNavigateToCustom}
+          />
+        );
+    }
   };
 
   return (
     <View style={[styles.container, { paddingTop: safeAreaInsets.top }]}>
       <Header onMenuPress={handleMenuPress} onInfoPress={handleInfoPress} />
 
-      <TabNavigation activeTab={activeTab} onTabChange={handleTabChange} />
-
-      {activeTab === 'ai' ? <AIGenerationPage /> : <CustomPostPage />}
+      {renderCurrentPage()}
 
       <BottomSheet
         visible={isBottomSheetVisible}
         onClose={handleCloseBottomSheet}
         onTellMeMore={handleTellMeMore}
       />
+
+      <BottomNavigation activeTab={activeTab} onTabPress={handleTabPress} />
     </View>
   );
 }

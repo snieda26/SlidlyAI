@@ -1,0 +1,6 @@
+export { default as AiGenerateIcon } from './AiGenerateIcon';
+export { default as EditIcon } from './EditIcon';
+export { default as PlusIcon } from './PlusIcon';
+export { default as SettingIcon } from './SettingIcon';
+export { default as SlidesIcon } from './SlidesIcon';
+export { default as TemplateIcon } from './TemplateIcon';

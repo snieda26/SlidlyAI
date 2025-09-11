@@ -20,13 +20,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuPress, onInfoPress }) => {
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
       <View style={styles.container}>
-        <TouchableOpacity style={styles.leftButton} onPress={onMenuPress}>
-          <View style={styles.menuIcon}>
-            <View style={styles.menuLine} />
-            <View style={styles.menuLine} />
-            <View style={styles.menuLine} />
-          </View>
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.leftButton} onPress={onMenuPress} />
 
         <Text style={styles.title}>{t('general.header.title')}</Text>
 
@@ -48,8 +42,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: '#f8f9fa',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
   },
   leftButton: {
     width: 40,
@@ -75,8 +67,8 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 19,
+    fontWeight: 'bold',
     color: '#000',
     textAlign: 'center',
   },

@@ -2,11 +2,19 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
 
-const CustomPostPage: React.FC = () => {
+interface CustomPostPageProps {
+  onBack: () => void;
+}
+
+const CustomPostPage: React.FC<CustomPostPageProps> = ({ onBack }) => {
   const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={onBack}>
+        <Text style={styles.backButtonText}>← Back</Text>
+      </TouchableOpacity>
+
       <View style={styles.content}>
         <View style={styles.illustration}>
           <Text style={styles.illustrationText}>✏️</Text>
@@ -42,6 +50,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+  },
+  backButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    alignSelf: 'flex-start',
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#6c757d',
+    fontWeight: '500',
   },
   content: {
     flex: 1,

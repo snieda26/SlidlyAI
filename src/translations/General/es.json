@@ -1,6 +1,12 @@
 {
   "header": {
-    "title": "Borrador"
+    "title": "Slidly"
+  },
+  "home": {
+    "generateByAI": "Generar con IA",
+    "aiDescription": "Puedo convertir tus ideas en publicaciones de redes sociales",
+    "customPost": "Publicación personalizada",
+    "customDescription": "Crea tu publicación personalizada. añade algo de texto ..."
   },
   "tabs": {
     "generateAI": "Generar con IA",
