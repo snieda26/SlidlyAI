@@ -18,7 +18,6 @@ import TabNavigation from './src/components/TabNavigation';
 import AIGenerationPage from './src/pages/AIGenerationPage';
 import CustomPostPage from './src/pages/CustomPostPage';
 import BottomSheet from './src/components/BottomSheet';
-import CatIllustration from './src/components/CatIllustration';
 import { initializeLocale } from './src/i18n';
 
 function App() {
@@ -71,8 +70,6 @@ function AppContent() {
       <TabNavigation activeTab={activeTab} onTabChange={handleTabChange} />
 
       {activeTab === 'ai' ? <AIGenerationPage /> : <CustomPostPage />}
-
-      <CatIllustration />
 
       <BottomSheet
         visible={isBottomSheetVisible}

@@ -34,10 +34,28 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 
   const onGestureEvent = Animated.event(
     [{ nativeEvent: { translationY: translateY } }],
-    { useNativeDriver: true },
+    {
+      useNativeDriver: true,
+      listener: (event: PanGestureHandlerGestureEvent) => {
+        const { translationY } = event.nativeEvent;
+        // Constrain upward movement - don't allow dragging more than 50px up
+        if (translationY < -50) {
+          translateY.setValue(-50);
+        }
+      },
+    },
   );
 
   const onHandlerStateChange = (event: PanGestureHandlerGestureEvent) => {
+    if (event.nativeEvent.state === State.BEGAN) {
+      lastGestureY.current = 0;
+    }
+
+    if (event.nativeEvent.state === State.ACTIVE) {
+      const { translationY } = event.nativeEvent;
+      lastGestureY.current = translationY;
+    }
+
     if (event.nativeEvent.state === State.END) {
       const { translationY, velocityY } = event.nativeEvent;
 
