@@ -4,8 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   SlidesIcon,
   TemplateIcon,
-  PlusIcon,
   SettingIcon,
+  EditIcon,
 } from '../assets/icons';
 
 interface BottomNavigationProps {
@@ -22,7 +22,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   const tabs = [
     { id: 'my-slides', label: 'My slides', icon: SlidesIcon },
     { id: 'template', label: 'Template', icon: TemplateIcon },
-    { id: 'new-slide', label: 'New slide', icon: PlusIcon },
+    { id: 'new-slide', label: 'New slide', icon: EditIcon },
     { id: 'settings', label: 'Settings', icon: SettingIcon },
   ];
 
@@ -55,10 +55,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: '#ffffff',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
     paddingTop: 8,
     paddingHorizontal: 16,
+    borderRadius: 19,
   },
   tab: {
     flex: 1,

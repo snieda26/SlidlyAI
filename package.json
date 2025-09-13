@@ -10,15 +10,20 @@
     "test": "jest"
   },
   "dependencies": {
+    "@invertase/react-native-apple-authentication": "^2.4.1",
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-google-signin/google-signin": "^16.0.0",
     "@react-native/new-app-screen": "0.81.1",
     "i18n-js": "^4.5.1",
     "react": "19.1.0",
     "react-native": "0.81.1",
     "react-native-gesture-handler": "^2.28.0",
+    "react-native-keychain": "^10.0.0",
     "react-native-localize": "^3.5.2",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-svg": "^15.13.0",
-    "react-native-svg-transformer": "^1.5.1"
+    "react-native-svg-transformer": "^1.5.1",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

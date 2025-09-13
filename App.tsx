@@ -17,9 +17,11 @@ import Header from './src/components/Header';
 import HomePage from './src/pages/HomePage';
 import AIGenerationPage from './src/pages/AIGenerationPage';
 import CustomPostPage from './src/pages/CustomPostPage';
+import LoginPage from './src/pages/LoginPage';
 import BottomSheet from './src/components/BottomSheet';
 import BottomNavigation from './src/components/BottomNavigation';
 import { initializeLocale } from './src/i18n';
+import { useAuthStore } from './src/store/authStore';
 
 function App() {
   // Initialize locale when app starts
@@ -38,6 +40,7 @@ function App() {
 
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
+  const { isAuthenticated, user } = useAuthStore();
   const [currentPage, setCurrentPage] = useState<'home' | 'ai' | 'custom'>(
     'home',
   );
@@ -96,6 +99,13 @@ function AppContent() {
         );
     }
   };
+
+  alert(JSON.stringify(user));
+
+  // Show login page if not authenticated
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   return (
     <View style={[styles.container, { paddingTop: safeAreaInsets.top }]}>

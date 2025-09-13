@@ -7,6 +7,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
+import { AuthService } from '../services/authService';
 
 interface HeaderProps {
   onMenuPress?: () => void;
@@ -16,6 +17,14 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onMenuPress, onInfoPress }) => {
   const { t } = useTranslation();
 
+  const handleLogout = async () => {
+    try {
+      await AuthService.signOut();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
@@ -24,11 +33,16 @@ const Header: React.FC<HeaderProps> = ({ onMenuPress, onInfoPress }) => {
 
         <Text style={styles.title}>{t('general.header.title')}</Text>
 
-        <TouchableOpacity style={styles.rightButton} onPress={onInfoPress}>
-          <View style={styles.infoIcon}>
-            <Text style={styles.infoText}>i</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.rightButtons}>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.rightButton} onPress={onInfoPress}>
+            <View style={styles.infoIcon}>
+              <Text style={styles.infoText}>i</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   );
@@ -48,6 +62,22 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  rightButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoutButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: '#dc3545',
+    borderRadius: 4,
+    marginRight: 8,
+  },
+  logoutText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
   },
   rightButton: {
     width: 40,

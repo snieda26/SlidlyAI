@@ -1,19 +1,17 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
-import { AiGenerateIcon, EditIcon } from '../assets/icons';
+import { EditIcon } from '../assets/icons';
+import { useAuthStore } from '../store/authStore';
 
 interface HomePageProps {
-  onNavigateToAI: () => void;
   onNavigateToCustom: () => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({
-  onNavigateToAI,
-  onNavigateToCustom,
-}) => {
+const HomePage: React.FC<HomePageProps> = ({ onNavigateToCustom }) => {
+  const { isAuthenticated } = useAuthStore();
   const { t } = useTranslation();
-
+  console.log('isAuthenticated', isAuthenticated);
   return (
     <View style={styles.container}>
       <View style={styles.cardsContainer}>
