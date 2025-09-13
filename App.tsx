@@ -18,6 +18,7 @@ import HomePage from './src/pages/HomePage';
 import AIGenerationPage from './src/pages/AIGenerationPage';
 import CustomPostPage from './src/pages/CustomPostPage';
 import LoginPage from './src/pages/LoginPage';
+import SettingsPage from './src/pages/SettingsPage';
 import BottomSheet from './src/components/BottomSheet';
 import BottomNavigation from './src/components/BottomNavigation';
 import { initializeLocale } from './src/i18n';
@@ -41,11 +42,29 @@ function App() {
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
   const { isAuthenticated, user } = useAuthStore();
-  const [currentPage, setCurrentPage] = useState<'home' | 'ai' | 'custom'>(
-    'home',
-  );
+  const [currentPage, setCurrentPage] = useState<
+    'home' | 'ai' | 'custom' | 'settings'
+  >('home');
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('my-slides');
+
+  // Sync activeTab with currentPage
+  React.useEffect(() => {
+    switch (currentPage) {
+      case 'home':
+        setActiveTab('my-slides');
+        break;
+      case 'custom':
+        setActiveTab('new-slide');
+        break;
+      case 'settings':
+        setActiveTab('settings');
+        break;
+      default:
+        // Keep current activeTab for other pages
+        break;
+    }
+  }, [currentPage]);
 
   const handleMenuPress = () => {
     // TODO: Implement menu functionality
@@ -78,10 +97,30 @@ function AppContent() {
     setCurrentPage('home');
   };
 
+  const handleNavigateToSettings = () => {
+    setCurrentPage('settings');
+  };
+
   const handleTabPress = (tab: string) => {
     setActiveTab(tab);
-    // TODO: Implement navigation logic for each tab
-    console.log('Tab pressed:', tab);
+
+    switch (tab) {
+      case 'my-slides':
+        setCurrentPage('home');
+        break;
+      case 'template':
+        // TODO: Implement template page
+        console.log('Template tab pressed');
+        break;
+      case 'new-slide':
+        setCurrentPage('custom');
+        break;
+      case 'settings':
+        setCurrentPage('settings');
+        break;
+      default:
+        console.log('Unknown tab pressed:', tab);
+    }
   };
 
   const renderCurrentPage = () => {
@@ -90,6 +129,8 @@ function AppContent() {
         return <AIGenerationPage onBack={handleBackToHome} />;
       case 'custom':
         return <CustomPostPage onBack={handleBackToHome} />;
+      case 'settings':
+        return <SettingsPage />;
       default:
         return (
           <HomePage
@@ -99,8 +140,6 @@ function AppContent() {
         );
     }
   };
-
-  alert(JSON.stringify(user));
 
   // Show login page if not authenticated
   if (!isAuthenticated) {
