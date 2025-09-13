@@ -29,7 +29,7 @@ export const getColors = (isDark: boolean) => ({
   // Tab colors
   tab: {
     background: isDark ? '#2d2d2d' : '#ffffff',
-    active: isDark ? '#007AFF' : '#007AFF',
+    active: isDark ? '#ffffff' : '#212529',
     inactive: isDark ? '#808080' : '#6c757d',
   },
 
