@@ -23,6 +23,8 @@ import BottomSheet from './src/components/BottomSheet';
 import BottomNavigation from './src/components/BottomNavigation';
 import { initializeLocale } from './src/i18n';
 import { useAuthStore } from './src/store/authStore';
+import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
+import { getColors } from './src/constants/colors';
 
 function App() {
   // Initialize locale when app starts
@@ -33,7 +35,9 @@ function App() {
   return (
     <GestureHandlerRootView style={styles.gestureRoot}>
       <SafeAreaProvider>
-        <AppContent />
+        <ThemeProvider>
+          <AppContent />
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
@@ -41,7 +45,9 @@ function App() {
 
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
+  const { isDark } = useTheme();
+  const Colors = getColors(isDark);
   const [currentPage, setCurrentPage] = useState<
     'home' | 'ai' | 'custom' | 'settings'
   >('home');
@@ -97,10 +103,6 @@ function AppContent() {
     setCurrentPage('home');
   };
 
-  const handleNavigateToSettings = () => {
-    setCurrentPage('settings');
-  };
-
   const handleTabPress = (tab: string) => {
     setActiveTab(tab);
 
@@ -142,12 +144,20 @@ function AppContent() {
   };
 
   // Show login page if not authenticated
-  if (!isAuthenticated) {
-    return <LoginPage />;
-  }
+  // if (!isAuthenticated) {
+  //   return <LoginPage />;
+  // }
 
   return (
-    <View style={[styles.container, { paddingTop: safeAreaInsets.top }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingTop: safeAreaInsets.top,
+          backgroundColor: Colors.background.primary,
+        },
+      ]}
+    >
       <Header onMenuPress={handleMenuPress} onInfoPress={handleInfoPress} />
 
       {renderCurrentPage()}
@@ -169,7 +179,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
 });
 

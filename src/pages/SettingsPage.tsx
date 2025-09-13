@@ -7,12 +7,17 @@ import {
   ScrollView,
   Alert,
   Image,
+  Switch,
 } from 'react-native';
 import { useAuthStore } from '../store/authStore';
 import { AuthService } from '../services/authService';
+import { useTheme } from '../contexts/ThemeContext';
+import { getColors } from '../constants/colors';
 
 const SettingsPage: React.FC = () => {
   const { user, logout } = useAuthStore();
+  const { isDark, toggleTheme } = useTheme();
+  const Colors = getColors(isDark);
 
   const handleLogout = async () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
@@ -54,15 +59,23 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Settings</Text>
+    <ScrollView
+      style={[styles.container, { backgroundColor: Colors.background.primary }]}
+    >
+      <View style={[styles.header, { borderBottomColor: Colors.card.border }]}>
+        <Text style={[styles.title, { color: Colors.text.primary }]}>
+          Settings
+        </Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account Information</Text>
+        <Text style={[styles.sectionTitle, { color: Colors.text.primary }]}>
+          Account Information
+        </Text>
 
-        <View style={styles.userCard}>
+        <View
+          style={[styles.userCard, { backgroundColor: Colors.card.background }]}
+        >
           <View style={styles.userInfo}>
             <View style={styles.avatarContainer}>
               {user?.profileImage ? (
@@ -71,7 +84,12 @@ const SettingsPage: React.FC = () => {
                   style={styles.avatar}
                 />
               ) : (
-                <View style={styles.defaultAvatar}>
+                <View
+                  style={[
+                    styles.defaultAvatar,
+                    { backgroundColor: Colors.primary },
+                  ]}
+                >
                   <Text style={styles.avatarText}>
                     {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                   </Text>
@@ -80,13 +98,24 @@ const SettingsPage: React.FC = () => {
             </View>
 
             <View style={styles.userDetails}>
-              <Text style={styles.userName}>
+              <Text style={[styles.userName, { color: Colors.text.primary }]}>
                 {user?.name || 'Unknown User'}
               </Text>
-              <Text style={styles.userEmail}>{user?.email || 'No email'}</Text>
+              <Text
+                style={[styles.userEmail, { color: Colors.text.secondary }]}
+              >
+                {user?.email || 'No email'}
+              </Text>
               <View style={styles.platformInfo}>
                 <Text style={styles.platformIcon}>{getPlatformIcon()}</Text>
-                <Text style={styles.platformText}>{getAuthProvider()}</Text>
+                <Text
+                  style={[
+                    styles.platformText,
+                    { color: Colors.text.secondary },
+                  ]}
+                >
+                  {getAuthProvider()}
+                </Text>
               </View>
             </View>
           </View>
@@ -94,24 +123,76 @@ const SettingsPage: React.FC = () => {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account Actions</Text>
+        <Text style={[styles.sectionTitle, { color: Colors.text.primary }]}>
+          Appearance
+        </Text>
 
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <View
+          style={[
+            styles.themeCard,
+            { backgroundColor: Colors.card.background },
+          ]}
+        >
+          <View style={styles.themeRow}>
+            <View style={styles.themeInfo}>
+              <Text style={[styles.themeLabel, { color: Colors.text.primary }]}>
+                Dark Mode
+              </Text>
+              <Text
+                style={[
+                  styles.themeDescription,
+                  { color: Colors.text.secondary },
+                ]}
+              >
+                Switch between light and dark theme
+              </Text>
+            </View>
+            <Switch
+              value={isDark}
+              onValueChange={toggleTheme}
+              trackColor={{ false: Colors.gray[300], true: Colors.primary }}
+              thumbColor={isDark ? Colors.white : Colors.gray[100]}
+            />
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: Colors.text.primary }]}>
+          Account Actions
+        </Text>
+
+        <TouchableOpacity
+          style={[styles.logoutButton, { backgroundColor: Colors.error }]}
+          onPress={handleLogout}
+        >
           <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>App Information</Text>
+        <Text style={[styles.sectionTitle, { color: Colors.text.primary }]}>
+          App Information
+        </Text>
 
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Version</Text>
-          <Text style={styles.infoValue}>1.0.0</Text>
+        <View
+          style={[styles.infoRow, { borderBottomColor: Colors.card.border }]}
+        >
+          <Text style={[styles.infoLabel, { color: Colors.text.primary }]}>
+            Version
+          </Text>
+          <Text style={[styles.infoValue, { color: Colors.text.secondary }]}>
+            1.0.0
+          </Text>
         </View>
 
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Platform</Text>
-          <Text style={styles.infoValue}>
+        <View
+          style={[styles.infoRow, { borderBottomColor: Colors.card.border }]}
+        >
+          <Text style={[styles.infoLabel, { color: Colors.text.primary }]}>
+            Platform
+          </Text>
+          <Text style={[styles.infoValue, { color: Colors.text.secondary }]}>
             {user?.platform?.toUpperCase() || 'Unknown'}
           </Text>
         </View>
@@ -123,18 +204,15 @@ const SettingsPage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
   header: {
     padding: 20,
     paddingTop: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#343a40',
   },
   section: {
     marginTop: 20,
@@ -143,11 +221,9 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#495057',
     marginBottom: 15,
   },
   userCard: {
-    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 20,
     shadowColor: '#000',
@@ -175,7 +251,6 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#007AFF',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -190,12 +265,10 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#343a40',
     marginBottom: 4,
   },
   userEmail: {
     fontSize: 16,
-    color: '#6c757d',
     marginBottom: 8,
   },
   platformInfo: {
@@ -208,11 +281,38 @@ const styles = StyleSheet.create({
   },
   platformText: {
     fontSize: 14,
-    color: '#6c757d',
     fontWeight: '500',
   },
+  themeCard: {
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  themeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  themeInfo: {
+    flex: 1,
+    marginRight: 16,
+  },
+  themeLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  themeDescription: {
+    fontSize: 14,
+  },
   logoutButton: {
-    backgroundColor: '#dc3545',
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -229,15 +329,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
   },
   infoLabel: {
     fontSize: 16,
-    color: '#495057',
   },
   infoValue: {
     fontSize: 16,
-    color: '#6c757d',
     fontWeight: '500',
   },
 });

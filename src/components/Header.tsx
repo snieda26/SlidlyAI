@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
 import { InfoIcon } from '../assets/icons';
+import { useTheme } from '../contexts/ThemeContext';
+import { getColors } from '../constants/colors';
 
 interface HeaderProps {
   onMenuPress?: () => void;
@@ -16,17 +18,29 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuPress, onInfoPress }) => {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
+  const Colors = getColors(isDark);
 
   return (
     <>
-      <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
-      <View style={styles.container}>
+      <StatusBar
+        barStyle={isDark ? Colors.statusBar.light : Colors.statusBar.dark}
+        backgroundColor={Colors.background.primary}
+      />
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: Colors.background.primary },
+        ]}
+      >
         <TouchableOpacity style={styles.leftButton} onPress={onMenuPress} />
 
-        <Text style={styles.title}>{t('general.header.title')}</Text>
+        <Text style={[styles.title, { color: Colors.text.primary }]}>
+          {t('general.header.title')}
+        </Text>
 
         <TouchableOpacity style={styles.rightButton} onPress={onInfoPress}>
-          <InfoIcon />
+          <InfoIcon color={Colors.text.primary} />
         </TouchableOpacity>
       </View>
     </>
@@ -40,7 +54,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#f8f9fa',
   },
   leftButton: {
     width: 40,
@@ -54,35 +67,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  menuIcon: {
-    width: 20,
-    height: 16,
-    justifyContent: 'space-between',
-  },
-  menuLine: {
-    width: '100%',
-    height: 2,
-    backgroundColor: '#000',
-    borderRadius: 1,
-  },
   title: {
     fontSize: 19,
     fontWeight: 'bold',
-    color: '#000',
     textAlign: 'center',
-  },
-  infoIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#6c757d',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  infoText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
   },
 });
 

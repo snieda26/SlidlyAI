@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
+import { useTheme } from '../contexts/ThemeContext';
+import { getColors } from '../constants/colors';
 
 interface CustomPostPageProps {
   onBack: () => void;
@@ -8,24 +10,44 @@ interface CustomPostPageProps {
 
 const CustomPostPage: React.FC<CustomPostPageProps> = ({ onBack }) => {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
+  const Colors = getColors(isDark);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { backgroundColor: Colors.background.primary }]}
+    >
       <TouchableOpacity style={styles.backButton} onPress={onBack}>
-        <Text style={styles.backButtonText}>← Back</Text>
+        <Text style={[styles.backButtonText, { color: Colors.text.secondary }]}>
+          ← Back
+        </Text>
       </TouchableOpacity>
 
       <View style={styles.content}>
         <View style={styles.illustration}>
           <Text style={styles.illustrationText}>✏️</Text>
         </View>
-        <Text style={styles.title}>{t('customPost.title')}</Text>
-        <Text style={styles.subtitle}>{t('customPost.subtitle')}</Text>
+        <Text style={[styles.title, { color: Colors.text.secondary }]}>
+          {t('customPost.title')}
+        </Text>
+        <Text style={[styles.subtitle, { color: Colors.text.secondary }]}>
+          {t('customPost.subtitle')}
+        </Text>
       </View>
 
       <View style={styles.inputContainer}>
-        <View style={styles.inputField}>
-          <Text style={styles.placeholderText}>
+        <View
+          style={[
+            styles.inputField,
+            { backgroundColor: Colors.input.background },
+          ]}
+        >
+          <Text
+            style={[
+              styles.placeholderText,
+              { color: Colors.input.placeholder },
+            ]}
+          >
             {t('customPost.placeholder')}
           </Text>
           <View style={styles.inputActions}>
@@ -34,8 +56,10 @@ const CustomPostPage: React.FC<CustomPostPageProps> = ({ onBack }) => {
                 {t('general.buttons.voiceIcon')}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.sendButton}>
-              <Text style={styles.sendIcon}>
+            <TouchableOpacity
+              style={[styles.sendButton, { backgroundColor: Colors.gray[500] }]}
+            >
+              <Text style={[styles.sendIcon, { color: Colors.white }]}>
                 {t('general.buttons.sendIcon')}
               </Text>
             </TouchableOpacity>
@@ -49,7 +73,6 @@ const CustomPostPage: React.FC<CustomPostPageProps> = ({ onBack }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
   backButton: {
     paddingHorizontal: 16,
@@ -58,7 +81,6 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    color: '#6c757d',
     fontWeight: '500',
   },
   content: {
@@ -80,13 +102,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '600',
-    color: '#6c757d',
     textAlign: 'center',
     marginBottom: 12,
   },
   subtitle: {
     fontSize: 16,
-    color: '#6c757d',
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -95,7 +115,6 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   inputField: {
-    backgroundColor: '#fff',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -114,7 +133,6 @@ const styles = StyleSheet.create({
   placeholderText: {
     flex: 1,
     fontSize: 16,
-    color: '#6c757d',
   },
   inputActions: {
     flexDirection: 'row',
@@ -131,12 +149,10 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#6c757d',
     justifyContent: 'center',
     alignItems: 'center',
   },
   sendIcon: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },

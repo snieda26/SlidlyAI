@@ -7,6 +7,8 @@ import {
   SettingIcon,
   EditIcon,
 } from '../assets/icons';
+import { useTheme } from '../contexts/ThemeContext';
+import { getColors } from '../constants/colors';
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -18,6 +20,8 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   onTabPress,
 }) => {
   const insets = useSafeAreaInsets();
+  const { isDark } = useTheme();
+  const Colors = getColors(isDark);
 
   const tabs = [
     { id: 'my-slides', label: 'My slides', icon: SlidesIcon },
@@ -27,7 +31,15 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   ];
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingBottom: insets.bottom,
+          backgroundColor: Colors.tab.background,
+        },
+      ]}
+    >
       {tabs.map(tab => (
         <TouchableOpacity
           key={tab.id}
@@ -38,10 +50,21 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
           <tab.icon
             width={20}
             height={20}
-            color={activeTab === tab.id ? '#000000' : '#666666'}
+            color={
+              activeTab === tab.id ? Colors.tab.active : Colors.tab.inactive
+            }
           />
           <Text
-            style={[styles.label, activeTab === tab.id && styles.activeLabel]}
+            style={[
+              styles.label,
+              {
+                color:
+                  activeTab === tab.id
+                    ? Colors.tab.active
+                    : Colors.tab.inactive,
+              },
+              activeTab === tab.id && styles.activeLabel,
+            ]}
           >
             {tab.label}
           </Text>
@@ -54,7 +77,6 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff',
     paddingTop: 8,
     paddingHorizontal: 16,
     borderRadius: 19,
@@ -70,12 +92,10 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: '#666666',
     textAlign: 'center',
     fontWeight: '500',
   },
   activeLabel: {
-    color: '#000000',
     fontWeight: '600',
   },
 });

@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
 import { EditIcon } from '../assets/icons';
 import { useAuthStore } from '../store/authStore';
+import { useTheme } from '../contexts/ThemeContext';
+import { getColors } from '../constants/colors';
 
 interface HomePageProps {
   onNavigateToCustom: () => void;
@@ -11,26 +13,36 @@ interface HomePageProps {
 const HomePage: React.FC<HomePageProps> = ({ onNavigateToCustom }) => {
   const { isAuthenticated } = useAuthStore();
   const { t } = useTranslation();
+  const { isDark } = useTheme();
+  const Colors = getColors(isDark);
   console.log('isAuthenticated', isAuthenticated);
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { backgroundColor: Colors.background.primary }]}
+    >
       <View style={styles.cardsContainer}>
         <TouchableOpacity
-          style={styles.card}
+          style={[styles.card, { backgroundColor: Colors.card.background }]}
           onPress={onNavigateToCustom}
           activeOpacity={0.8}
         >
           <View style={styles.cardContent}>
             <View style={styles.iconContainer}>
               <View>
-                <EditIcon width={54} height={54} color="#333333" />
+                <EditIcon width={54} height={54} color={Colors.text.primary} />
               </View>
             </View>
             <View style={styles.textContainer}>
-              <Text style={styles.cardTitle}>
+              <Text style={[styles.cardTitle, { color: Colors.text.primary }]}>
                 {t('general.home.customPost')}
               </Text>
-              <Text style={styles.cardDescription}>
+              <Text
+                style={[
+                  styles.cardDescription,
+                  { color: Colors.text.secondary },
+                ]}
+              >
                 {t('general.home.customDescription')}
               </Text>
             </View>
@@ -43,7 +55,6 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToCustom }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f8f9fa',
     paddingHorizontal: 20,
     paddingTop: 20,
     justifyContent: 'center',
@@ -53,7 +64,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   card: {
-    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
     shadowColor: '#000',
@@ -72,38 +82,16 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginRight: 16,
   },
-  aiIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-  },
-  pencilIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-  },
   textContainer: {
     flex: 1,
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333333',
     marginBottom: 4,
   },
   cardDescription: {
     fontSize: 14,
-    color: '#666666',
     lineHeight: 20,
   },
 });
