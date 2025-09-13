@@ -15,7 +15,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { getColors } from '../constants/colors';
 
 const SettingsPage: React.FC = () => {
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const { isDark, toggleTheme } = useTheme();
   const Colors = getColors(isDark);
 

@@ -35,8 +35,8 @@ export const getColors = (isDark: boolean) => ({
 
   // Status bar colors
   statusBar: {
-    light: 'light-content',
-    dark: 'dark-content',
+    light: 'light-content' as const,
+    dark: 'dark-content' as const,
   },
 
   // Shadow colors

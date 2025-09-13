@@ -1,4 +1,5 @@
 export { default as AiGenerateIcon } from './AiGenerateIcon';
+export { default as CreateIcon } from './CreateIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as InfoIcon } from './InfoIcon';
 export { default as PlusIcon } from './PlusIcon';

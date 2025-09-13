@@ -5,7 +5,7 @@ import {
   SlidesIcon,
   TemplateIcon,
   SettingIcon,
-  EditIcon,
+  CreateIcon,
 } from '../assets/icons';
 import { useTheme } from '../contexts/ThemeContext';
 import { getColors } from '../constants/colors';
@@ -25,7 +25,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
 
   const tabs = [
     { id: 'my-slides', label: 'My slides', icon: SlidesIcon },
-    { id: 'create', label: 'Create', icon: EditIcon },
+    { id: 'create', label: 'Create', icon: CreateIcon },
     { id: 'template', label: 'Template', icon: TemplateIcon },
     { id: 'settings', label: 'Settings', icon: SettingIcon },
   ];
