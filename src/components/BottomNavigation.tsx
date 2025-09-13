@@ -25,8 +25,8 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
 
   const tabs = [
     { id: 'my-slides', label: 'My slides', icon: SlidesIcon },
+    { id: 'create', label: 'Create', icon: EditIcon },
     { id: 'template', label: 'Template', icon: TemplateIcon },
-    { id: 'new-slide', label: 'New slide', icon: EditIcon },
     { id: 'settings', label: 'Settings', icon: SettingIcon },
   ];
 

@@ -1,7 +1,7 @@
 export const getColors = (isDark: boolean) => ({
   // Background colors
   background: {
-    primary: isDark ? '#1a1a1a' : '#ffffff',
+    primary: isDark ? '#1a1a1a' : '#F3F3F9',
     secondary: isDark ? '#2d2d2d' : '#f8f9fa',
     tertiary: isDark ? '#404040' : '#e9ecef',
   },
