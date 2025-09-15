@@ -1,8 +1,17 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
 import { useTheme } from '../contexts/ThemeContext';
 import { getColors } from '../constants/colors';
+import { sendChatGPTRequest } from '../services/chatgptService';
 
 interface CustomPostPageProps {
   onBack: () => void;
@@ -12,6 +21,30 @@ const CustomPostPage: React.FC<CustomPostPageProps> = ({ onBack }) => {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const Colors = getColors(isDark);
+
+  const [inputText, setInputText] = useState('');
+  const [response, setResponse] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSendMessage = async () => {
+    if (!inputText.trim()) return;
+
+    setIsLoading(true);
+    setError('');
+    setResponse('');
+
+    try {
+      const chatResponse = await sendChatGPTRequest(inputText);
+      setResponse(chatResponse);
+    } catch (err) {
+      // @ts-ignore
+      setError(err.message);
+      console.error('Error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <View
@@ -23,49 +56,95 @@ const CustomPostPage: React.FC<CustomPostPageProps> = ({ onBack }) => {
         </Text>
       </TouchableOpacity>
 
-      <View style={styles.content}>
-        <View style={styles.illustration}>
-          <Text style={styles.illustrationText}>✏️</Text>
+      <ScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          <View style={styles.illustration}>
+            <Text style={styles.illustrationText}>✏️</Text>
+          </View>
+          <Text style={[styles.title, { color: Colors.text.secondary }]}>
+            {t('customPost.title')}
+          </Text>
+          <Text style={[styles.subtitle, { color: Colors.text.secondary }]}>
+            {t('customPost.subtitle')}
+          </Text>
         </View>
-        <Text style={[styles.title, { color: Colors.text.secondary }]}>
-          {t('customPost.title')}
-        </Text>
-        <Text style={[styles.subtitle, { color: Colors.text.secondary }]}>
-          {t('customPost.subtitle')}
-        </Text>
-      </View>
 
-      <View style={styles.inputContainer}>
-        <View
-          style={[
-            styles.inputField,
-            { backgroundColor: Colors.input.background },
-          ]}
-        >
-          <Text
+        {/* Response Display */}
+        {(response || error) && (
+          <View style={styles.responseContainer}>
+            <Text
+              style={[styles.responseLabel, { color: Colors.text.secondary }]}
+            >
+              Response:
+            </Text>
+            <View
+              style={[
+                styles.responseBox,
+                { backgroundColor: Colors.input.background },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.responseText,
+                  { color: error ? Colors.error : Colors.text.primary },
+                ]}
+              >
+                {error || response}
+              </Text>
+            </View>
+          </View>
+        )}
+
+        <View style={styles.inputContainer}>
+          <View
             style={[
-              styles.placeholderText,
-              { color: Colors.input.placeholder },
+              styles.inputField,
+              { backgroundColor: Colors.input.background },
             ]}
           >
-            {t('customPost.placeholder')}
-          </Text>
-          <View style={styles.inputActions}>
-            <TouchableOpacity style={styles.voiceButton}>
-              <Text style={styles.voiceIcon}>
-                {t('general.buttons.voiceIcon')}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.sendButton, { backgroundColor: Colors.gray[500] }]}
-            >
-              <Text style={[styles.sendIcon, { color: Colors.white }]}>
-                {t('general.buttons.sendIcon')}
-              </Text>
-            </TouchableOpacity>
+            <TextInput
+              style={[styles.textInput, { color: Colors.text.primary }]}
+              placeholder={t('customPost.placeholder')}
+              placeholderTextColor={Colors.input.placeholder}
+              value={inputText}
+              onChangeText={setInputText}
+              multiline
+              maxLength={500}
+            />
+            <View style={styles.inputActions}>
+              <TouchableOpacity style={styles.voiceButton}>
+                <Text style={styles.voiceIcon}>
+                  {t('general.buttons.voiceIcon')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.sendButton,
+                  {
+                    backgroundColor:
+                      inputText.trim() && !isLoading
+                        ? Colors.gray[500]
+                        : Colors.gray[300],
+                  },
+                ]}
+                onPress={handleSendMessage}
+                disabled={!inputText.trim() || isLoading}
+              >
+                {isLoading ? (
+                  <ActivityIndicator size="small" color={Colors.white} />
+                ) : (
+                  <Text style={[styles.sendIcon, { color: Colors.white }]}>
+                    {t('general.buttons.sendIcon')}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -83,11 +162,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  content: {
+  scrollContainer: {
     flex: 1,
+  },
+  content: {
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 32,
+    paddingVertical: 20,
   },
   illustration: {
     width: 120,
@@ -110,17 +192,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
   },
-  inputContainer: {
+  responseContainer: {
     paddingHorizontal: 16,
-    paddingBottom: 32,
+    marginBottom: 20,
   },
-  inputField: {
+  responseLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  responseBox: {
     borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    padding: 16,
+    minHeight: 80,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -130,13 +214,41 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
-  placeholderText: {
+  responseText: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  inputContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+  },
+  inputField: {
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    minHeight: 50,
+  },
+  textInput: {
     flex: 1,
     fontSize: 16,
+    maxHeight: 100,
+    textAlignVertical: 'top',
   },
   inputActions: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 12,
   },
   voiceButton: {
     marginRight: 12,
